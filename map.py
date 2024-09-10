@@ -2,20 +2,17 @@ import pandas as pd
 import folium
 import requests
 
-# Load the dataset
-df = pd.read_csv('STRUTTURE-TOSCANA.csv')
+# Load the dataset and ensure the 'Telefono' column is read as a string
+df = pd.read_csv('STRUTTURE-TOSCANA.csv', dtype={'Telefono': str})
 
 # Clean postal code format by converting float to string and handling missing values
 df['Cap'] = df['Cap'].fillna('').apply(lambda x: str(int(x)) if x != '' else '')
-
-# Ensure phone numbers are treated as strings without modification
-df['Telefono'] = df['Telefono'].astype(str)
 
 # Concatenate address fields to form a complete address
 df['full_address'] = df['Indirizzo'] + ', ' + df['comune'] + ', ' + df['prov_estesa'] + ', ' + df['Cap']
 
 # Set up Google Geocoding API
-API_KEY = 'myapikeyhere'
+API_KEY = 'yourapikey'
 base_url = 'https://maps.googleapis.com/maps/api/geocode/json'
 
 # Assign colors to different structure types based on the updated list
